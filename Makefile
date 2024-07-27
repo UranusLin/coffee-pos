@@ -40,3 +40,8 @@ stop:
 # 重新啟動專案
 .PHONY: restart
 restart: stop run
+
+# 安裝依賴庫
+.PHONY: install
+install:
+	$(MVN) dependency:resolve
