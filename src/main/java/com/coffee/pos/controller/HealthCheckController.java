@@ -1,15 +1,13 @@
 package com.coffee.pos.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.coffee.pos.dto.CommonResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import com.coffee.pos.dto.CommonResponse;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HealthCheckController {
-    
     /*
      * GetMapping
      * PostMapping
@@ -17,7 +15,6 @@ public class HealthCheckController {
      * PatchMapping
      * DeleteMapping
      */
-
     @GetMapping("api/v1/health")
     public String healthCheckV1() {
         return "Application v1 is running";

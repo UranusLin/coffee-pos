@@ -45,3 +45,8 @@ restart: stop run
 .PHONY: install
 install:
 	$(MVN) dependency:resolve
+
+# spotless:apply
+.PHONY: format
+format:
+	${MVN} spotless:apply
