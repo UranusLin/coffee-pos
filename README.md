@@ -69,6 +69,7 @@ docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:33
 
 ### Application Configuration
 Configure the database connection in `src/main/resources/application.properties` or `src/main/resources/application.yml`:
+
 `src/main/resources/application.properties`
 ```
 spring.datasource.url=jdbc:mysql://localhost:3306/pos
@@ -82,6 +83,7 @@ spring.jpa.show-sql=true
 spring.flyway.baselineOnMigrate=true
 ```
 `src/main/resources/application.yml`
+
 ```yml
 spring:
   application:
