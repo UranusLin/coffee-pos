@@ -1,6 +1,7 @@
 package com.coffee.pos.controller;
 
 import com.coffee.pos.dto.CommonResponse;
+import com.coffee.pos.enums.CommonStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HealthCheckController {
+
     /*
      * GetMapping
      * PostMapping
@@ -24,7 +26,8 @@ public class HealthCheckController {
     public ResponseEntity<CommonResponse> healthCheckV2() {
         CommonResponse commonResponse = new CommonResponse();
         commonResponse.setCode("00");
-        commonResponse.setMsg("success");
+        commonResponse.setMessage("success");
+        commonResponse.setStatus(CommonStatus.SUCCESS);
         return new ResponseEntity<>(commonResponse, HttpStatus.OK);
     }
 }
