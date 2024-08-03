@@ -1,10 +1,9 @@
 package com.coffee.pos.dto;
 
 import com.coffee.pos.enums.CommonStatus;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
