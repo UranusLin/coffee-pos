@@ -6,8 +6,11 @@ import com.coffee.pos.dto.goods.CreateGoodsDTO;
 import com.coffee.pos.enums.CommonStatus;
 import com.coffee.pos.model.Goods;
 import com.coffee.pos.service.GoodsService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +23,27 @@ public class GoodsController {
 
     @GetMapping("")
     public ResponseEntity<CommonListResponse<Goods>> getGoods(
-            @RequestParam(required = false) String name) {
-        List<Goods> goodsList;
+            @RequestParam(required = false) String name,
+            @RequestParam(required = true, defaultValue = "1") int page,
+            @RequestParam(required = true, defaultValue = "10") int size,
+            @RequestParam(required = true, defaultValue = "id") String sortBy,
+            @RequestParam(required = true, defaultValue = "asc") String sortDirection) {
+
+        Sort.Direction direction =
+                sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        //        Sort.Direction direction;
+        //        if (sortDirection.equalsIgnoreCase("desc")) {
+        //            direction = Sort.Direction.DESC;
+        //        } else {
+        //            direction = Sort.Direction.ASC;
+        //        }
+
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(direction, sortBy));
+        Page<Goods> goodsList;
         if (name != null && !name.isEmpty()) {
-            goodsList = goodsService.findByName(name);
+            goodsList = goodsService.findByName(name, pageable);
         } else {
-            goodsList = goodsService.getAll();
+            goodsList = goodsService.getAll(pageable);
         }
         CommonListResponse<Goods> response =
                 new CommonListResponse<>("Success", CommonStatus.SUCCESS, goodsList);
