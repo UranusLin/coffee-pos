@@ -25,7 +25,6 @@ public class HealthCheckController {
     @GetMapping("api/v2/health")
     public ResponseEntity<CommonResponse> healthCheckV2() {
         CommonResponse commonResponse = new CommonResponse();
-        commonResponse.setCode("00");
         commonResponse.setMessage("success");
         commonResponse.setStatus(CommonStatus.SUCCESS);
         return new ResponseEntity<>(commonResponse, HttpStatus.OK);
