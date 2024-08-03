@@ -26,8 +26,8 @@ public class GoodsService {
         return goodsRepository.findById(id).orElse(null);
     }
 
-    public Goods findByName(String name) {
-        return goodsRepository.findByName(name);
+    public List<Goods> findByName(String name) {
+        return goodsRepository.findByNameContaining(name);
     }
 
     private Goods mapToEntity(CreateGoodsDTO goods) {

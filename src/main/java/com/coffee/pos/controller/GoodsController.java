@@ -19,8 +19,14 @@ public class GoodsController {
     @Autowired private GoodsService goodsService;
 
     @GetMapping("")
-    public ResponseEntity<CommonListResponse<Goods>> getGoods() {
-        List<Goods> goodsList = goodsService.getAll();
+    public ResponseEntity<CommonListResponse<Goods>> getGoods(
+            @RequestParam(required = false) String name) {
+        List<Goods> goodsList;
+        if (name != null && !name.isEmpty()) {
+            goodsList = goodsService.findByName(name);
+        } else {
+            goodsList = goodsService.getAll();
+        }
         CommonListResponse<Goods> response =
                 new CommonListResponse<>("Success", CommonStatus.SUCCESS, goodsList);
         return new ResponseEntity<>(response, HttpStatus.OK);
