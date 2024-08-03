@@ -23,6 +23,10 @@ public class GoodsService {
         return goodsRepository.save(newGoods);
     }
 
+    public Goods save(Goods goods) {
+        return goodsRepository.save(goods);
+    }
+
     public Goods findById(String id) {
         return goodsRepository.findById(id).orElse(null);
     }

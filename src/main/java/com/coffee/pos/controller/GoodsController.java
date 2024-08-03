@@ -6,6 +6,7 @@ import com.coffee.pos.dto.goods.CreateGoodsDTO;
 import com.coffee.pos.enums.CommonStatus;
 import com.coffee.pos.model.Goods;
 import com.coffee.pos.service.GoodsService;
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,10 +25,10 @@ public class GoodsController {
     @GetMapping("")
     public ResponseEntity<CommonListResponse<Goods>> getGoods(
             @RequestParam(required = false) String name,
-            @RequestParam(required = true, defaultValue = "1") int page,
-            @RequestParam(required = true, defaultValue = "10") int size,
-            @RequestParam(required = true, defaultValue = "id") String sortBy,
-            @RequestParam(required = true, defaultValue = "asc") String sortDirection) {
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDirection) {
 
         Sort.Direction direction =
                 sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
@@ -64,5 +65,29 @@ public class GoodsController {
         CommonObjectResponse response =
                 new CommonObjectResponse("Success", CommonStatus.SUCCESS, newGoods);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("{id}")
+    public ResponseEntity<CommonObjectResponse> updateGoods(
+            @RequestParam String id, @RequestBody CreateGoodsDTO createGoodsDTO) {
+        Goods existGoods = goodsService.findById(id);
+        if (existGoods == null) {
+            return ResponseEntity.notFound().build();
+        }
+        if (createGoodsDTO.getName() != null) {
+            existGoods.setName(createGoodsDTO.getName());
+        }
+        if (createGoodsDTO.getAmount() != null) {
+            existGoods.setAmount(createGoodsDTO.getAmount());
+        }
+        if (createGoodsDTO.getDescription() != null) {
+            existGoods.setDescription(createGoodsDTO.getDescription());
+        }
+        existGoods.setUpdateAt(LocalDateTime.now());
+        existGoods = goodsService.save(existGoods);
+        System.out.println(existGoods);
+        CommonObjectResponse response =
+                new CommonObjectResponse("Success", CommonStatus.SUCCESS, existGoods);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
