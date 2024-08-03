@@ -19,8 +19,6 @@ public class GoodsService {
 
     public Goods save(CreateGoodsDTO goods) {
         Goods newGoods = mapToEntity(goods);
-        newGoods.setCreateAt(LocalDateTime.now());
-        newGoods.setUpdateAt(LocalDateTime.now());
         return goodsRepository.save(newGoods);
     }
 
@@ -37,6 +35,8 @@ public class GoodsService {
         newGoods.setName(goods.getName());
         newGoods.setDescription(goods.getDescription());
         newGoods.setAmount(goods.getAmount());
+        newGoods.setCreateAt(LocalDateTime.now());
+        newGoods.setUpdateAt(LocalDateTime.now());
         return newGoods;
     }
 }
