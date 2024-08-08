@@ -1,0 +1,1 @@
+ALTER table goods add column goods_unit varchar(40);

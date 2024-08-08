@@ -20,4 +20,5 @@ public class Goods {
     private Integer amount;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
+    private String goodsUnit;
 }

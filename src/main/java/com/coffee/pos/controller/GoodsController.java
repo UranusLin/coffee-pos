@@ -22,7 +22,7 @@ public class GoodsController {
 
     @Autowired private GoodsService goodsService;
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<CommonListResponse<Goods>> getGoods(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "1") int page,
@@ -59,7 +59,7 @@ public class GoodsController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<CommonObjectResponse> saveGoods(@RequestBody CreateGoodsDTO goods) {
         Goods newGoods = goodsService.save(goods);
         CommonObjectResponse response =
@@ -82,6 +82,9 @@ public class GoodsController {
         }
         if (createGoodsDTO.getDescription() != null) {
             existGoods.setDescription(createGoodsDTO.getDescription());
+        }
+        if (createGoodsDTO.getGoodsUnit() != null) {
+            existGoods.setGoodsUnit(createGoodsDTO.getGoodsUnit());
         }
         existGoods.setUpdateAt(LocalDateTime.now());
         existGoods = goodsService.save(existGoods);
