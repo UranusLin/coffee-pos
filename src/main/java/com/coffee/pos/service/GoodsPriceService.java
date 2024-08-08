@@ -1,6 +1,7 @@
 package com.coffee.pos.service;
 
 import com.coffee.pos.dto.goods_price.CreateGoodsPriceDTO;
+import com.coffee.pos.dto.goods_price.UpdateGoodsPriceDTO;
 import com.coffee.pos.model.Goods;
 import com.coffee.pos.model.GoodsPrice;
 import com.coffee.pos.repository.GoodsPriceRepository;
@@ -26,6 +27,21 @@ public class GoodsPriceService {
 
     public GoodsPrice queryById(String id) {
         return goodsPriceRepository.findById(id).orElse(null);
+    }
+
+    public GoodsPrice update(String id, UpdateGoodsPriceDTO updateGoodsPriceDTO) {
+        GoodsPrice goodsPrice = queryById(id);
+        if (goodsPrice != null) {
+            if (updateGoodsPriceDTO.getPrice() != null) {
+                goodsPrice.setPrice(updateGoodsPriceDTO.getPrice());
+                goodsPrice.setUpdateAt(LocalDateTime.now());
+                return goodsPriceRepository.save(goodsPrice);
+            } else {
+                return goodsPrice;
+            }
+        } else {
+            return null;
+        }
     }
 
     private GoodsPrice mapToEntity(CreateGoodsPriceDTO createGoodsPriceDTO) {

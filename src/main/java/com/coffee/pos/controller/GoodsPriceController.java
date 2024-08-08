@@ -2,6 +2,7 @@ package com.coffee.pos.controller;
 
 import com.coffee.pos.dto.CommonObjectResponse;
 import com.coffee.pos.dto.goods_price.CreateGoodsPriceDTO;
+import com.coffee.pos.dto.goods_price.UpdateGoodsPriceDTO;
 import com.coffee.pos.enums.CommonStatus;
 import com.coffee.pos.model.GoodsPrice;
 import com.coffee.pos.service.GoodsPriceService;
@@ -31,6 +32,19 @@ public class GoodsPriceController {
     public ResponseEntity<CommonObjectResponse> save(
             @RequestBody CreateGoodsPriceDTO createGoodsPriceDTO) {
         GoodsPrice goodsPrice = goodsPriceService.createGoodsPrice(createGoodsPriceDTO);
+        if (goodsPrice != null) {
+            return new ResponseEntity<>(
+                    new CommonObjectResponse("Success", CommonStatus.SUCCESS, goodsPrice),
+                    HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CommonObjectResponse> update(
+            @PathVariable String id, @RequestBody UpdateGoodsPriceDTO updateGoodsPriceDTO) {
+        GoodsPrice goodsPrice = goodsPriceService.update(id, updateGoodsPriceDTO);
         if (goodsPrice != null) {
             return new ResponseEntity<>(
                     new CommonObjectResponse("Success", CommonStatus.SUCCESS, goodsPrice),
