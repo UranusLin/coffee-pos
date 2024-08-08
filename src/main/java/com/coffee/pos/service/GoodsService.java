@@ -42,6 +42,7 @@ public class GoodsService {
         newGoods.setAmount(goods.getAmount());
         newGoods.setCreateAt(LocalDateTime.now());
         newGoods.setUpdateAt(LocalDateTime.now());
+        newGoods.setGoodsUnit(goods.getGoodsUnit());
         return newGoods;
     }
 }
