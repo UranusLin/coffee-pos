@@ -5,7 +5,6 @@ import com.coffee.pos.model.Goods;
 import com.coffee.pos.model.GoodsPrice;
 import com.coffee.pos.repository.GoodsPriceRepository;
 import java.time.LocalDateTime;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class GoodsPriceService {
     }
 
     public GoodsPrice queryById(String id) {
-        logger.info("[queryById] User use {} to search from id.", id);
+        logger.info("[GoodsPrice][queryById] User use {} to search from id.", id);
         return goodsPriceRepository.findById(id).orElse(null);
     }
 
