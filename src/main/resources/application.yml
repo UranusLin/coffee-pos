@@ -10,6 +10,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   flyway:
     baselineOnMigrate: false
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
 
 springdoc:
   swagger-ui:

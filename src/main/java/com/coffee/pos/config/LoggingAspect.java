@@ -1,6 +1,8 @@
 package com.coffee.pos.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -29,12 +31,15 @@ public class LoggingAspect {
         String methodName = joinPoint.getSignature().getName();
         Object[] args = joinPoint.getArgs();
 
+        // 過濾輸入
+        Object[] filteredArgs = filterArgs(args);
+
         // 紀錄輸入
         logger.info(
                 "Enter: {}.{}() with argument[s] = {}",
                 className,
                 methodName,
-                objectMapper.writeValueAsString(args));
+                objectMapper.writeValueAsString(filteredArgs));
 
         try {
             Object result = joinPoint.proceed();
@@ -54,5 +59,14 @@ public class LoggingAspect {
                     "Exception in {}.{}() with cause = {}", className, methodName, e.getMessage());
             throw e;
         }
+    }
+
+    private Object[] filterArgs(Object[] args) {
+        if (args == null) {
+            return new Object[0];
+        }
+        return java.util.Arrays.stream(args)
+                .filter(arg -> !(arg instanceof ServletRequest || arg instanceof ServletResponse))
+                .toArray();
     }
 }
