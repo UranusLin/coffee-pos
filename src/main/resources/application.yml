@@ -17,3 +17,11 @@ springdoc:
 
 server:
   port: 8081
+
+logging:
+  level:
+    root: INFO
+    com.coffee.pos: DEBUG
+  file:
+    name: logs/application.log
+    path: logs
