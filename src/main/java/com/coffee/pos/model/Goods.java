@@ -1,10 +1,9 @@
 package com.coffee.pos.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Data;
 
 @Entity
@@ -21,4 +20,8 @@ public class Goods {
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
     private String goodsUnit;
+
+    @JsonIgnoreProperties("goods")
+    @OneToMany(mappedBy = "goods", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<GoodsPrice> goodsPrices;
 }

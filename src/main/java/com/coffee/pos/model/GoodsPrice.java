@@ -1,5 +1,6 @@
 package com.coffee.pos.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class GoodsPrice {
 
     @ManyToOne
     @JoinColumn(name = "goods_id")
+    @JsonIgnoreProperties("goodsPrices")
     private Goods goods;
 
     private Integer price;
