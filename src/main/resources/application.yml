@@ -10,6 +10,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   flyway:
     baselineOnMigrate: false
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
 
 springdoc:
   swagger-ui:
@@ -17,3 +20,11 @@ springdoc:
 
 server:
   port: 8081
+
+logging:
+  level:
+    root: INFO
+    com.coffee.pos: DEBUG
+  file:
+    name: logs/application.log
+    path: logs
