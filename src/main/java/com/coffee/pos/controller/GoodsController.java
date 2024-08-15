@@ -88,7 +88,6 @@ public class GoodsController {
         }
         existGoods.setUpdateAt(LocalDateTime.now());
         existGoods = goodsService.save(existGoods);
-        System.out.println(existGoods);
         CommonObjectResponse response =
                 new CommonObjectResponse("Success", CommonStatus.SUCCESS, existGoods);
         return new ResponseEntity<>(response, HttpStatus.OK);
