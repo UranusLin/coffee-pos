@@ -28,3 +28,8 @@ logging:
   file:
     name: logs/application.log
     path: logs
+
+jwt:
+  secret: deeae5a95xxxe3a7abc16300072557be
+  expiration: 86400000
+  refresh-token-expiration: 172800000

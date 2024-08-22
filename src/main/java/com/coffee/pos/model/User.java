@@ -1,10 +1,7 @@
 package com.coffee.pos.model;
 
-import com.coffee.pos.enums.Role;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,9 +30,25 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
+    //    @JsonIgnoreProperties("user")
+    //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    //    private Set<UserRole> userRoles = new HashSet<>();
+    //
+    //    @JsonIgnoreProperties("user")
+    //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    //    private Set<UserPermission> userPermissions = new HashSet<>();
 
-    private Set<String> permissions = new HashSet<>();
+    public void addRole(Role role) {
+        UserRole userRole = new UserRole();
+        userRole.setUser(this);
+        userRole.setRole(role);
+        //        userRoles.add(userRole);
+    }
+
+    public void addPermission(Permission permission) {
+        UserPermission userPermission = new UserPermission();
+        userPermission.setUser(this);
+        userPermission.setPermission(permission);
+        //        userPermissions.add(userPermission);
+    }
 }
