@@ -51,6 +51,7 @@ public class GoodsController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+//    @PreAuthorize("hasRole('MANAGER')")
     @GetMapping("/{id}")
     public ResponseEntity<CommonObjectResponse> getGoodsById(@PathVariable String id) {
         Goods goods = goodsService.findById(id);
