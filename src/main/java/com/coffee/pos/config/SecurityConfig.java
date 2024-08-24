@@ -30,6 +30,10 @@ public class SecurityConfig {
                                                 "swagger-ui/**", "/v3/api-docs/**",
                                                 "/api/v1/users/register", "/api/v1/users/login")
                                         .permitAll()
+                                        .requestMatchers("/api/v1/goods")
+                                        .hasAnyRole("ADMIN", "MANAGER")
+                                        .requestMatchers("/api/v1/good_price")
+                                        .hasRole("MANAGER")
                                         .requestMatchers("/api/v1/**")
                                         .authenticated()
                                         .anyRequest()
