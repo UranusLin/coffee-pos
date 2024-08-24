@@ -8,13 +8,21 @@ import com.coffee.pos.enums.CommonStatus;
 import com.coffee.pos.model.User;
 import com.coffee.pos.repository.RoleRepository;
 import com.coffee.pos.repository.UserRepository;
+import com.coffee.pos.utils.JwtUtil;
 import com.coffee.pos.utils.ResponseUtil;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +35,8 @@ public class UserService {
     @Autowired private ResponseUtil responseUtil;
     @Autowired private RoleRepository roleRepository;
     @Autowired PasswordEncoder passwordEncoder;
+    @Autowired AuthenticationManager authenticationManager;
+    @Autowired JwtUtil jwtUtil;
 
     //    public ResponseEntity<CommonObjectResponse> createUser(CreateUserDTO createUserDTO) {
     //        User user =
@@ -95,27 +105,25 @@ public class UserService {
     }
 
     public ResponseEntity<CommonObjectResponse> userLoginService(LoginRequestDTO loginRequestDTO) {
-        User user = userRepository.findByEmail(loginRequestDTO.getEmail());
-        if (user != null) {
-            if (passwordEncoder.matches(loginRequestDTO.getPassword(), user.getPassword())) {
-                UserResponse userResponse =
-                        UserResponse.builder()
-                                .id(user.getId())
-                                .userName(user.getUsername())
-                                .email(user.getEmail())
-                                .build();
-                CommonObjectResponse response =
-                        new CommonObjectResponse("Success", CommonStatus.SUCCESS, userResponse);
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            } else {
-                CommonObjectResponse response =
-                        new CommonObjectResponse("User not exist", CommonStatus.FAILED, null);
-                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-            }
-        } else {
+        try {
+            Authentication authentication =
+                    authenticationManager.authenticate(
+                            new UsernamePasswordAuthenticationToken(
+                                    loginRequestDTO.getEmail(), loginRequestDTO.getPassword()));
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            logger.info(userDetails.toString());
+            String token = jwtUtil.generateToken(userDetails);
+
+            Map<String, Object> userResponse = new HashMap<>();
+            userResponse.put("token", token);
+            userResponse.put("username", userDetails.getUsername());
             CommonObjectResponse response =
-                    new CommonObjectResponse("User not exist", CommonStatus.FAILED, null);
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                    new CommonObjectResponse("Success", CommonStatus.SUCCESS, userResponse);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (BadCredentialsException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }
