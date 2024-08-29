@@ -5,8 +5,12 @@ import com.coffee.pos.dto.CommonObjectResponse;
 import com.coffee.pos.dto.goods.CreateGoodsDTO;
 import com.coffee.pos.enums.CommonStatus;
 import com.coffee.pos.model.Goods;
+import com.coffee.pos.model.User;
 import com.coffee.pos.service.GoodsService;
+import com.coffee.pos.utils.SecurityUtil;
 import java.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +25,9 @@ import org.springframework.web.bind.annotation.*;
 public class GoodsController {
 
     @Autowired private GoodsService goodsService;
+    @Autowired private SecurityUtil securityUtil;
+
+    private static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
 
     @GetMapping
     public ResponseEntity<CommonListResponse<Goods>> getGoods(
@@ -30,6 +37,8 @@ public class GoodsController {
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDirection) {
 
+        User user = securityUtil.getCurrentUser();
+        logger.info("User: {}", user);
         Sort.Direction direction =
                 sortDirection.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         //        Sort.Direction direction;
@@ -51,7 +60,7 @@ public class GoodsController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('MANAGER')")
+    //    @PreAuthorize("hasRole('MANAGER')")
     @GetMapping("/{id}")
     public ResponseEntity<CommonObjectResponse> getGoodsById(@PathVariable String id) {
         Goods goods = goodsService.findById(id);
